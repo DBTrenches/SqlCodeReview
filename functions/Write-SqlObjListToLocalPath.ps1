@@ -1,4 +1,9 @@
 ﻿Function Write-SqlObjListToLocalPath{
+<#
+    .DESCRIPTION
+        Takes a well-formatted array of objects from Format-SqlObjectList
+        Retrieves & appends the object_id & calls Write-SqlObjectToLocalPath for each
+#>
     [cmdletbinding()]Param(
          [parameter(Mandatory=$true)]$objList
         ,[string]$fromServer
@@ -9,7 +14,7 @@
         $objId = (Get-SqlObjectID @PSItem -env).ID 
         $obj   = Get-SqlObject @PSItem -objectId $objId
         
-        Add-Member -MemberType Property -Name ObjectID -Value 0
+        Add-Member -MemberType Property -Name ObjectID -Value $objId
     }
 
     foreach($o in $objArray){
