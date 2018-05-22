@@ -1,4 +1,4 @@
-﻿Function Write-SqlObjectToRepo {
+﻿Function Write-SqlObjectToLocalPath {
     [cmdletbinding()]Param(
          [string][parameter(Mandatory=$true)]$InstanceName
         ,[string][parameter(Mandatory=$true)]$DatabaseName
@@ -55,4 +55,8 @@ where $objectId < 0;
     }
     
     $objDef | New-Item -ItemType File -Path $filePath -Force | Out-Null
+
+    [PSCustomObject]@{
+        IsOnDisk = Test-Path $filePath
+    }
 }

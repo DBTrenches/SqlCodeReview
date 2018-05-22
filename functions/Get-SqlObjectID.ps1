@@ -1,4 +1,8 @@
 function Get-SqlObjectID {
+<#
+    .SYNOPSIS
+        Return db-scoped object id for a object by exact name.
+#>
     [CmdletBinding()]Param(
          [Parameter(Mandatory=$true)]
             [Alias('serverName','sqlServer','server')]

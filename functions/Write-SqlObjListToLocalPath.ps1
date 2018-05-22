@@ -6,28 +6,17 @@
 #>
     [cmdletbinding()]Param(
          [parameter(Mandatory=$true)]$objList
-        ,[string]$fromServer
-        ,[string]$env
     )
 
     $objList | ForEach-Object {
-        $objId = (Get-SqlObjectID @PSItem -env).ID 
-        $obj   = Get-SqlObject @PSItem -objectId $objId
+        $objId  = (Get-SqlObjectID @PSItem -env).ID 
+        $object = Get-SqlObject @PSItem -objectId $objId
         
+        $isOnDisk = (Write-SqlObjectToLocalPath @object -objectId $objId).IsOnDisk
+
         Add-Member -MemberType Property -Name ObjectID -Value $objId
+        Add-Member -MemberType Property -Name Object   -Value $obj
+        Add-Member -MemberType Property -Name IsOnDisk -Value $isOnDisk
     }
 
-    foreach($o in $objArray){
-        $isOnDisk=(Write-SqlObjectToLocalPath `
-            -instanceName $fromServer `
-            -DatabaseName $o.d `
-            -schemaName $o.s `
-            -objectName $o.o `
-            -env $env)
-
-        $o.isOnDisk = $isOnDisk
-    }
-
-    Write-Host "Please see below to validate scripting status for input object(s)"
-    $objArray | Format-Table
 }

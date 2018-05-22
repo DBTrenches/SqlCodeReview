@@ -1,4 +1,7 @@
 function Get-SqlObject {
+<#
+    .DESCRIPTION
+#>
     [CmdletBinding()]Param(
         [Parameter(Mandatory=$true)]
             [Alias('serverName','sqlServer','server')]
@@ -31,17 +34,19 @@ select
     $object = (Invoke-SqlCmd @conn -query $sql_GetObject)
 
     if($object.is_table){
-        $object.def = (Get-SqlCreateTable @conn -tableId $objectId).createTableCommand
+        $object.definition = (Get-SqlCreateTable @conn -tableId $objectId).createTableCommand
     }
 
-    [PSCustomObject]@{
-        definition = $PSItem.definition
-        base_type  = $PSItem.base_type
-        is_table   = $PSItem.is_table
-        server     = $PSItem.server
-        database   = (Get-SqlQuoteNameSpares -text $PSItem.database).text
-        schema     = (Get-SqlQuoteNameSpares -text $PSItem.schema).text
-        name       = (Get-SqlQuoteNameSpares -text $PSItem.name).text
-        id         = $PSItem.id
+    $object | ForEach-Object {
+        [PSCustomObject]@{
+            definition = $PSItem.definition
+            base_type  = $PSItem.base_type
+            is_table   = $PSItem.is_table
+            server     = $PSItem.server
+            database   = (Get-SqlQuoteNameSparse -text $PSItem.database).text
+            schema     = (Get-SqlQuoteNameSparse -text $PSItem.schema).text
+            name       = (Get-SqlQuoteNameSparse -text $PSItem.name).text
+            id         = $PSItem.id
+        }
     }
 }
