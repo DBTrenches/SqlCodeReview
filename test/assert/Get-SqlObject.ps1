@@ -10,7 +10,7 @@ select
     ,[name]       = object_name([object_id])
     ,id           = [object_id]
 from sys.objects 
-where [object_id] in (object_id('dbo.foo'),object_id('dbo.bar'))
+where [object_id] in (object_id('dbo.sproc_UnitTest'),object_id('dbo.tbl_UnitTest'))
 "@
 
 $connStr = @{
@@ -19,33 +19,33 @@ $connStr = @{
 }
 
 $baseline = Invoke-SqlCmd @connStr -Query $getBaseline
-$foo_base = $baseline | Where-Object {$PSItem.Name -eq "foo"}
-$bar_base = $baseline | Where-Object {$PSItem.Name -eq "bar"}
+$sproc_base = $baseline | Where-Object {$PSItem.Name -eq "sproc_UnitTest"}
+$tbl_base   = $baseline | Where-Object {$PSItem.Name -eq "tbl_UnitTest"}
 
-$foo_get = Get-SqlObject @connStr -objectId $foo_base.id
-$bar_get = Get-SqlObject @connStr -objectId $bar_base.id
+$sproc_get = Get-SqlObject @connStr -objectId $sproc_base.id
+$tbl_get = Get-SqlObject @connStr -objectId $tbl_base.id
 
 
-Describe "Unit testing Get-SqlObject for 'Foo'" {
-        #$foo_get.definition | Should be $foo_base.definition 
-    It "Foo base_type" {$foo_get.base_type  | Should be $foo_base.base_type  }
-    It "Foo is_table " {$foo_get.is_table   | Should be $foo_base.is_table   }
-    It "Foo server   " {$foo_get.server     | Should be $foo_base.server     }
-    It "Foo database " {$foo_get.database   | Should be $foo_base.database   }
-    It "Foo schema   " {$foo_get.schema     | Should be $foo_base.schema     }
-    It "Foo name     " {$foo_get.name       | Should be $foo_base.name       }
-    It "Foo id       " {$foo_get.id         | Should be $foo_base.id         }
+Describe "Unit testing Get-SqlObject for 'sproc'" {
+        #$sproc_get.definition | Should be $sproc_base.definition 
+    It "sproc base_type" {$sproc_get.base_type  | Should be $sproc_base.base_type  }
+    It "sproc is_table " {$sproc_get.is_table   | Should be $sproc_base.is_table   }
+    It "sproc server   " {$sproc_get.server     | Should be $sproc_base.server     }
+    It "sproc database " {$sproc_get.database   | Should be $sproc_base.database   }
+    It "sproc schema   " {$sproc_get.schema     | Should be $sproc_base.schema     }
+    It "sproc name     " {$sproc_get.name       | Should be $sproc_base.name       }
+    It "sproc id       " {$sproc_get.id         | Should be $sproc_base.id         }
 }
 
-Describe "Unit testing Get-SqlObject for 'Bar'" {
-        #$bar_get.definition | Should be $bar_base.definition 
-    It "Bar base_type" {$bar_get.base_type  | Should be $bar_base.base_type  }
-    It "Bar is_table " {$bar_get.is_table   | Should be $bar_base.is_table   }
-    It "Bar server   " {$bar_get.server     | Should be $bar_base.server     }
-    It "Bar database " {$bar_get.database   | Should be $bar_base.database   }
-    It "Bar schema   " {$bar_get.schema     | Should be $bar_base.schema     }
-    It "Bar name     " {$bar_get.name       | Should be $bar_base.name       }
-    It "Bar id       " {$bar_get.id         | Should be $bar_base.id         }
+Describe "Unit testing Get-SqlObject for 'tbl'" {
+        #$tbl_get.definition | Should be $tbl_base.definition 
+    It "tbl base_type" {$tbl_get.base_type  | Should be $tbl_base.base_type  }
+    It "tbl is_table " {$tbl_get.is_table   | Should be $tbl_base.is_table   }
+    It "tbl server   " {$tbl_get.server     | Should be $tbl_base.server     }
+    It "tbl database " {$tbl_get.database   | Should be $tbl_base.database   }
+    It "tbl schema   " {$tbl_get.schema     | Should be $tbl_base.schema     }
+    It "tbl name     " {$tbl_get.name       | Should be $tbl_base.name       }
+    It "tbl id       " {$tbl_get.id         | Should be $tbl_base.id         }
 }
 
 

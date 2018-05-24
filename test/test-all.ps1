@@ -1,4 +1,6 @@
-﻿Set-Location "$((Get-GitRepo).RootFullPath)\test"
+﻿Set-Location ~\git\SqlCodeReview
+Import-Module .\SqlCodeReview.psd1
+Set-Location "$((Get-GitRepo).RootFullPath)\test"
 
 $setup   = Get-ChildItem ".\setup\*.ps1" 
 $assert  = Get-ChildItem ".\assert\*.ps1" 

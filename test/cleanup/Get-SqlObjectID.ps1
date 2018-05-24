@@ -5,8 +5,8 @@ $conn = @{
 }
 
 $cleanUp = @"
-drop proc if exists foo;
-drop table if exists bar;
+drop proc if exists dbo.sproc_UnitTest;
+drop table if exists dbo.tbl_UnitTest;
 "@
 
 Invoke-SqlCmd @conn -query $cleanup

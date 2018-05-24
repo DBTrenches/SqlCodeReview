@@ -9,6 +9,7 @@
     FunctionsToExport = @(
         'Get-SqlObjectID'
         'Get-SqlObject'
+        'Get-GitRepo'
     )
     CmdletsToExport   = '*'
     VariablesToExport = '*'

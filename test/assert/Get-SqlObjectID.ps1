@@ -1,8 +1,8 @@
 # assert
 $getBaseline = @"
 select 
-    object_id('dbo.foo') as foo_id, 
-    object_id('dbo.bar') as bar_id;
+    object_id('dbo.sproc_UnitTest') as sproc_id, 
+    object_id('dbo.tbl_UnitTest') as tbl_id;
 "@
 
 $connStr = @{
@@ -12,11 +12,11 @@ $connStr = @{
 
 $baseline = Invoke-SqlCmd @connStr -Query $getBaseline
 
-Describe "Unit testing Get-SqlObjectID" {
-    It "Foo ID" {
-        (Get-SqlObjectID @connStr -objectName "foo" -schemaName "dbo").id | Should Be $baseline.foo_id
+Describe "Unit test Get-SqlObjectID" {
+    It "Stored Proc ID" {
+        (Get-SqlObjectID @connStr -objectName "sproc_UnitTest" -schemaName "dbo").id | Should Be $baseline.sproc_id
     }
-    It "Bar ID" {
-        (Get-SqlObjectID @connStr -objectName "bar" -schemaName "dbo").id | Should Be $baseline.bar_id
+    It "Table ID" {
+        (Get-SqlObjectID @connStr -objectName "tbl_UnitTest" -schemaName "dbo").id | Should Be $baseline.tbl_id
     }
 }
