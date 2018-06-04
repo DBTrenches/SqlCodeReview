@@ -10,6 +10,10 @@
         'Get-SqlObjectID'
         'Get-SqlObject'
         'Get-GitRepo'
+        'Get-GitBranch'
+        'Assert-GitBranch'
+        'Enter-GitBranch'
+        'Get-SqlServerFromConfig'
     )
     CmdletsToExport   = '*'
     VariablesToExport = '*'

@@ -1,4 +1,5 @@
 {
 	 "CodeReviewRepo":"C:/users/peter/git/db-code"
-	,"ModuleRepo":"C:/users/peter/git/SqlCodeReview"
+	,"ModuleRepo":"C:/users/peter/git/review"
+	,"EnvironmentConfigFile":"C:/users/peter/git/review/config/default.config.csv"
 }

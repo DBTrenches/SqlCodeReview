@@ -1,15 +1,18 @@
 function Get-SqlObject {
 <#
-    .DESCRIPTION
+.DESCRIPTION
+
+.TODO
+    Permit passing name-only & determining object ID on the fly.
 #>
     [CmdletBinding()]Param(
-        [Parameter(Mandatory=$true)]
+         [Parameter(Mandatory=$true)]
             [Alias('serverName','sqlServer','server')]
             [string]$serverInstance
-       ,[Parameter(Mandatory=$true)]
+        ,[Parameter(Mandatory=$true)]
             [Alias('database','dbName')]
             [string]$databaseName
-	   ,[Parameter(Mandatory=$true)]
+	    ,[Parameter(Mandatory=$true)]
 			[Alias('object_id','id','oid','table_id','tableid')]   
 	  		[Int32]$objectId
     )

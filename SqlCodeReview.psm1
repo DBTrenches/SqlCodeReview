@@ -4,3 +4,4 @@
 . $PSScriptRoot\functions\Enter-GitBranch.ps1
 . $PSScriptRoot\functions\Get-SqlObjectID.ps1
 . $PSScriptRoot\functions\Get-SqlObject.ps1
+. $PSScriptRoot\functions\Get-SqlServerFromConfig.ps1
