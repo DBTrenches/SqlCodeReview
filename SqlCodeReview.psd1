@@ -14,6 +14,7 @@
         'Assert-GitBranch'
         'Enter-GitBranch'
         'Get-SqlServerFromConfig'
+        'Format-SqlObjectList'
     )
     CmdletsToExport   = '*'
     VariablesToExport = '*'
