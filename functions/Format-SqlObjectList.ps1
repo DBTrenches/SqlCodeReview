@@ -17,7 +17,7 @@ function Format-SqlObjectList {
 #>
     [CmdletBinding()]Param(
          [string[]]$objList
-        ,[string]$env
+        #,[string]$env
     )
 
     $objList | ForEach-Object {

@@ -2,16 +2,27 @@ function Get-SqlServerFromConfig {
 <#
 .DESCRIPTION
     Allow users to pass in a database a retun a list of server targets by environment.
+    Currently only operable from inside a git repo WITH a config file -_-...
+
+.EXAMPLE
+    Get-SqlServerFromConfig "foo"
+
+.TODO
+    Remove dependency on git repo.
+
 #>
     [CmdletBinding()]Param(
          [string]$database
         ,$config
     )
 
-    if($config -eq $null){
-        $configFile = (Get-Content -Path "$((Get-GitRepo).RootFullPath)/config/default.config.json" -Raw | ConvertFrom-Json).EnvironmentConfigFile
-        $config = Get-Content -Path $configFile -Raw | ConvertFrom-Csv
+    try {
+        if($config -eq $null){
+            $configFile = (Get-Content -Path "$((Get-GitRepo).RootFullPath)/config/default.config.json" -Raw | ConvertFrom-Json).EnvironmentConfigFile
+            $config = Get-Content -Path $configFile -Raw | ConvertFrom-Csv
+        }
     }
+    catch {}
 
     if([string]::IsNullOrWhitespace($database)){$database = "*"}
 
