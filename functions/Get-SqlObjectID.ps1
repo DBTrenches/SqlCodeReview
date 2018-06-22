@@ -1,7 +1,14 @@
 function Get-SqlObjectID {
 <#
-    .SYNOPSIS
-        Return db-scoped object id for a object by exact name.
+.SYNOPSIS
+    Given a known exact full name, return db-scoped object id.
+
+.DESCRIPTION
+    Returns zero when object is not found so we don't have to handle for System.DBNull
+
+.EXAMPLE
+    $wia = @{server=".";dbName="master";schema="dbo";name="sp_WhoIsActive"}
+    Get-SqlObjectID @wia
 #>
     [CmdletBinding()]Param(
          [Parameter(Mandatory=$true)]
@@ -14,7 +21,7 @@ function Get-SqlObjectID {
 			[Alias('schema')]
             [string]$schemaName
         ,[Parameter(Mandatory=$true)]
-			[Alias('object')]
+			[Alias('object','name')]
             [string]$objectName
     )
 

@@ -21,9 +21,9 @@ function Format-SqlObjectList {
     )
 
     $objList | ForEach-Object {
-        $DatabaseName = (Get-SqlQuoteNameSparse -text $PSItem.Split(".")[0]).text
-        $schemaName   = (Get-SqlQuoteNameSparse -text $PSItem.Split(".")[1]).text
-        $objectName   = (Get-SqlQuoteNameSparse -text $PSItem.Split(".")[2]).text
+        $DatabaseName = $PSItem.Split(".")[0]
+        $schemaName   = $PSItem.Split(".")[1]
+        $objectName   = $PSItem.Split(".")[2]
         
         if([string]::IsNullOrWhiteSpace($schemaName)){$schemaName="dbo"}      
         

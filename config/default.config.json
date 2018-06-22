@@ -1,5 +1,18 @@
 {
-	 "CodeReviewRepo":"C:/users/peter/git/db-code"
-	,"ModuleRepo":"C:/users/peter/git/review"
-	,"EnvironmentConfigFile":"C:/users/peter/git/review/config/default.config.csv"
+	"CodeReviewRepo":{
+		"Default":{
+			"LocalPath":"~/git/db-code",
+			"OriginCachedUrl":"https://www.github.com/petervandivier/db-code.git"
+		},
+		"MyOtherProject":{
+			"LocalPath":"c:/temp/git/db-code",
+			"OriginCachedUrl":"https://www.github.com/petervandivier/db-code.git"
+		}
+	},
+	"ModuleRepo":"~/git/review",
+	"EnvironmentConfigFile":"~/git/review/config/default.config.csv",
+	"DirectoryFormat":{
+		"StyleName":"fmt_Default",
+		"IsDatabasePrefixed":true
+	}
 }
