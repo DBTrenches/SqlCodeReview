@@ -1,9 +1,11 @@
 function Get-SqlObject {
 <#
 .DESCRIPTION
+    Get database-scoped object attributes.
 
-.TODO
-    Permit passing name-only & determining object ID on the fly.
+.EXAMPLE
+    $wia = @{server=".";dbName="master";schema="dbo";name="sp_WhoIsActive"}
+    Get-SqlObject @wia
 #>
     [CmdletBinding()]Param(
          [Parameter(Mandatory=$true)]
@@ -12,15 +14,20 @@ function Get-SqlObject {
         ,[Parameter(Mandatory=$true)]
             [Alias('database','dbName')]
             [string]$databaseName
-	    ,[Parameter(Mandatory=$true)]
-			[Alias('object_id','id','oid','table_id','tableid')]   
-	  		[Int32]$objectId
+        ,[Parameter(Mandatory=$true)]
+			[Alias('schema')]
+            [string]$schemaName
+        ,[Parameter(Mandatory=$true)]
+			[Alias('object','name')]
+            [string]$objectName
     )
 
     $conn = @{
         ServerInstance = $serverInstance
         Database       = $databaseName
     }
+
+    $objectId = (Get-SqlObjectID @conn -schemaName $schemaName -objectName $objectName).id
 
     $sql_GetObject = @"
 select 

@@ -22,8 +22,8 @@ $baseline = Invoke-SqlCmd @connStr -Query $getBaseline
 $sproc_base = $baseline | Where-Object {$PSItem.Name -eq "sproc_UnitTest"}
 $tbl_base   = $baseline | Where-Object {$PSItem.Name -eq "tbl_UnitTest"}
 
-$sproc_get = Get-SqlObject @connStr -objectId $sproc_base.id
-$tbl_get = Get-SqlObject @connStr -objectId $tbl_base.id
+$sproc_get = Get-SqlObject @connStr -schemaName "dbo" -objectName "sproc_UnitTest" 
+$tbl_get = Get-SqlObject @connStr -schemaName "dbo" -objectName "tbl_UnitTest"
 
 
 Describe "Unit testing Get-SqlObject for 'sproc'" {
