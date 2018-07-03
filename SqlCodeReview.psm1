@@ -1,12 +1,3 @@
-. $PSScriptRoot\functions\Assert-GitBranch.ps1
-. $PSScriptRoot\functions\Enter-GitBranch.ps1
-. $PSScriptRoot\functions\Format-SqlObjectList.ps1
-. $PSScriptRoot\functions\Get-GitBranch.ps1
-. $PSScriptRoot\functions\Get-GitRepo.ps1
-. $PSScriptRoot\functions\Get-SqlObject.ps1
-. $PSScriptRoot\functions\Get-SqlObjectID.ps1
-. $PSScriptRoot\functions\Get-SqlServerFromConfig.ps1
-. $PSScriptRoot\functions\New-SqlDeployScript.ps1
-. $PSScriptRoot\functions\Request-DBCodeReview.ps1
-. $PSScriptRoot\functions\Write-SqlObjectToLocalPath.ps1
-. $PSScriptRoot\functions\Write-SqlObjListToLocalPath.ps1
+Get-ChildItem "$PSScriptRoot\functions\" | ForEach-Object {
+    . $PSItem.FullName
+}
