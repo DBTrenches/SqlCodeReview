@@ -1,39 +1,27 @@
 function Get-SqlServerFromConfig {
 <#
 .DESCRIPTION
-    Allow users to pass in a database a retun a list of server targets by environment.
-    Currently only operable from inside a git repo WITH a config file -_-...
+    Cache environments for each database in a config file. 
+    Set default targets for database: "*". 
+    Return a list of server targets by DB name labelled by environment.
 
 .EXAMPLE
     Get-SqlServerFromConfig "foo"
-
-.TODO
-    Remove dependency on git repo.
-
 #>
     [CmdletBinding()]Param(
          [string]$database
-        ,$config
+        ,$config = $sqlCodeReview_DefaultServerConfig
     )
 
-    try {
-        if($config -eq $null){
-            $config = $sqlCodeReview_DefaultServerConfig
-        }
-    }
-    catch {
-        Write-Warning "Server config cache failed."
-    }
-
-    if([string]::IsNullOrWhitespace($database)){$database = "*"}
-
     $srv = $config | Where-Object {$PSItem.Database -eq $database}
+
     if(($srv | Measure-Object).Count -eq 0){
-        $srv = $config | Where-Object {$PSItem.Database -eq "*"}
+        Write-Verbose "Database [$database] was not found in your local cache. Update your config file to suppress this message."
+        $srv = $config | Where-Object {$PSItem.Database -eq "*"} # default
     }
 
     if(($srv | Measure-Object).Count -eq 0){
-        Write-Warning "Cached server parsing failed for database [$database]. You may need to add a default server to the config."
+        Write-Warning "Cached server parsing failed. You may need to add a default server to the config."
     }
 
     $srv | ForEach-Object {
