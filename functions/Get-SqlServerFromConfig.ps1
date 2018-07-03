@@ -18,8 +18,7 @@ function Get-SqlServerFromConfig {
 
     try {
         if($config -eq $null){
-            $configFile = (Get-Content -Path "$((Get-GitRepo).RootFullPath)/config/default.config.json" -Raw | ConvertFrom-Json).EnvironmentConfigFile
-            $config = Get-Content -Path $configFile -Raw | ConvertFrom-Csv
+            $config = $sqlCodeReview_DefaultServerConfig
         }
     }
     catch {

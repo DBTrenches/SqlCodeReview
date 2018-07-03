@@ -42,7 +42,7 @@
         ,[switch]$BypassForceUpdate
     )
 
-    begin {
+    #begin {
         $repo = (Get-GitRepo)
 
         if(-not $repo.IsRepo){
@@ -57,7 +57,7 @@
             Import-Module ../SqlCodeReview -Force
         }
 
-        $curBranch = $repo.CurrentBranch
+        #$curBranch = $repo.CurrentBranch
 
         if([string]::IsNullOrWhiteSpace($targetEnv)){$targetEnv = "prod"}
         if([string]::IsNullOrWhiteSpace($sourceEnv)){$sourceEnv = "qa"}
@@ -68,7 +68,7 @@
             $sourceBranch =  ($env:UserName -replace '[^a-zA-Z]', '').Substring(0,6) 
             $sourceBranch += (1..6 | ForEach-Object {'{0:X}' -f (Get-Random -Max 16)}) -join ''
         }
-    }
+    #}
 
     $objList = Format-SqlObjectList -objList $objList.Split(',')
 
