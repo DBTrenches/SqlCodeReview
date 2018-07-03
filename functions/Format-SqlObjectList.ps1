@@ -18,6 +18,7 @@ function Format-SqlObjectList {
     [CmdletBinding()]Param(
          [string[]]$objList
         #,[string]$env
+        ,$config
     )
 
     $objList | ForEach-Object {
@@ -28,7 +29,7 @@ function Format-SqlObjectList {
         if([string]::IsNullOrWhiteSpace($schemaName)){$schemaName="dbo"}      
         
         [PSCustomObject] @{
-            Server   = (Get-SqlServerFromConfig -Database $DatabaseName)
+            Server   = (Get-SqlServerFromConfig -Database $DatabaseName -config $config)
             Database = $DatabaseName
             Schema   = $schemaName
             Name     = $objectName

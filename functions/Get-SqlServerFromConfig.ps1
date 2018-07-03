@@ -22,13 +22,19 @@ function Get-SqlServerFromConfig {
             $config = Get-Content -Path $configFile -Raw | ConvertFrom-Csv
         }
     }
-    catch {}
+    catch {
+        Write-Warning "Server config cache failed."
+    }
 
     if([string]::IsNullOrWhitespace($database)){$database = "*"}
 
     $srv = $config | Where-Object {$PSItem.Database -eq $database}
     if(($srv | Measure-Object).Count -eq 0){
-        $srv = $config | Where-Object {$PSItem.Database -eq "__DEFAULT__"}
+        $srv = $config | Where-Object {$PSItem.Database -eq "*"}
+    }
+
+    if(($srv | Measure-Object).Count -eq 0){
+        Write-Warning "Cached server parsing failed for database [$database]. You may need to add a default server to the config."
     }
 
     $srv | ForEach-Object {

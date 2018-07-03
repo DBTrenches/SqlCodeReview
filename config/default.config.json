@@ -9,8 +9,8 @@
 			"OriginCachedUrl":"https://www.github.com/petervandivier/db-code.git"
 		}
 	},
-	"ModuleRepo":"~/git/review",
-	"EnvironmentConfigFile":"~/git/review/config/default.config.csv",
+	"ModuleRepo":"~/git/SqlCodeReview",
+	"EnvironmentConfigFile":"~/git/SqlCodeReview/config/default.config.csv",
 	"DirectoryFormat":{
 		"StyleName":"fmt_Default",
 		"IsDatabasePrefixed":true
