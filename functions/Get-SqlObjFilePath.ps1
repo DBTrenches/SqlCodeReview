@@ -1,24 +1,43 @@
 ﻿function Get-SqlObjFilePath {
 <#
 
+.EXAMPLE
+    $objs = Format-SqlObjectList -objList @("foo.bar.blah","bork..bork") 
+    $objs | Add-Member -Name "Type" -Value "tables" -type noteproperty
+    $objs | Get-SqlObjFilePath -PrefixDB -Verbose
+    
 #>
     [CmdletBinding()]Param(
-        $object
-        ,[Switch]$isDatabasePrefixed
+         [Parameter(
+            ValueFromPipeline=$true,    
+            ValueFromPipelineByPropertyName=$true)]
+            [string]$Database
+        ,[Parameter(
+            ValueFromPipeline=$true,    
+            ValueFromPipelineByPropertyName=$true)]
+            [string]$schema
+        ,[Parameter(
+            ValueFromPipeline=$true,    
+            ValueFromPipelineByPropertyName=$true)]
+            [string]$name
+        ,[Parameter(
+            ValueFromPipeline=$true,    
+            ValueFromPipelineByPropertyName=$true)]
+            [string]$type
+        ,[Switch]$PrefixDB
     )
+    Begin {
+        $repoRoot = (Get-GitRepo).RootFullPath
+    }
 
-    $object | ForEach-Object {
-        $dbPrefix = ("","/$($_.Database)")[$isDatabasePrefixed]
-        $schema = $_.Schema
-        $type   = $_.Type
-        $name   = $_.Name
+    Process {
+        $DBPrefix = ""
+        if($PrefixDB){$DBPrefix = "/$Database"}
 
-        $fmt_SchemaType = "$dbPrefix/$schema/$type/$name.sql"
-        $fmt_Default    = "$dbPrefix/$type/$schema.$name.sql"
-        $fmt_TypeSchema = "$dbPrefix/$type/$schema/$name.sql"
-    } | ForEach-Object [PSCustomObject] @{
-            fmt_SchemaType = $fmt_SchemaType 
-            fmt_Default    = $fmt_Default    
-            fmt_TypeSchema = $fmt_TypeSchema 
+        [PSCustomObject] @{
+            fmt_SchemaType = "$repoRoot$DBPrefix/$schema/$type/$name.sql"
+            fmt_Default    = "$repoRoot$DBPrefix/$type/$schema.$name.sql"
+            fmt_TypeSchema = "$repoRoot$DBPrefix/$type/$schema/$name.sql"
+        }
     }
 }
