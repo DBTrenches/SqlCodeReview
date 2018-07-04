@@ -8,7 +8,9 @@
     
 #>
     [CmdletBinding()]Param(
-         [Parameter(
+         [Parameter(ValidateNotNullOrEmpty)]
+            $formatStyle = "fmt_Default"
+        ,[Parameter(
             ValueFromPipeline=$true,    
             ValueFromPipelineByPropertyName=$true)]
             [string]$Database
@@ -34,10 +36,25 @@
         $DBPrefix = ""
         if($PrefixDB){$DBPrefix = "/$Database"}
 
+        Switch($formatStyle)
+        {
+            "fmt_SchemaType" { 
+                $filePath   = "$repoRoot$DBPrefix/$schema/$type/$name.sql"
+                $folderPath = "$repoRoot$DBPrefix/$schema/$type"
+            }
+            "fmt_Default"    { 
+                $filePath   = "$repoRoot$DBPrefix/$type/$schema.$name.sql"
+                $folderPath = "$repoRoot$DBPrefix/$type"
+            }
+            "fmt_TypeSchema" { 
+                $filePath   = "$repoRoot$DBPrefix/$type/$schema/$name.sql"
+                $folderPath = "$repoRoot$DBPrefix/$type/$schema"
+            }
+        }
+        
         [PSCustomObject] @{
-            fmt_SchemaType = "$repoRoot$DBPrefix/$schema/$type/$name.sql"
-            fmt_Default    = "$repoRoot$DBPrefix/$type/$schema.$name.sql"
-            fmt_TypeSchema = "$repoRoot$DBPrefix/$type/$schema/$name.sql"
+            FilePath   = $filePath
+            folderPath = $folderPath
         }
     }
 }

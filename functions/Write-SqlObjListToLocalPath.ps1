@@ -6,12 +6,19 @@
 #>
     [cmdletbinding()]Param(
          [parameter(Mandatory=$true)]$objList
+        ,[ValidateNotNullOrEmpty()]$project = "Default"
     )
+
+    $repoStyle = @{
+        formatStyle = $sqlCodeReview_DefaultModuleConfig.CodeReviewRepo.$project.DirectoryFormat.StyleName
+        nestUnder   = $sqlCodeReview_DefaultModuleConfig.CodeReviewRepo.$project.DirectoryFormat.NestFilesUnder
+        dbPrefix    = $sqlCodeReview_DefaultModuleConfig.CodeReviewRepo.$project.DirectoryFormat.IsDatabasePrefixed
+    }
 
     $objList | ForEach-Object {
         $object = Get-SqlObject @PSItem 
         
-        $isOnDisk = (Write-SqlObjectToLocalPath @object -objectId $objId).IsOnDisk
+        $isOnDisk = (Write-SqlObjectToLocalPath @object @repoStyle).IsOnDisk
 
         Add-Member -MemberType Property -Name Object   -Value $obj
         Add-Member -MemberType Property -Name IsOnDisk -Value $isOnDisk
