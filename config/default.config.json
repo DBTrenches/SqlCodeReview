@@ -1,18 +1,32 @@
 {
 	"CodeReviewRepo":{
 		"Default":{
-			"LocalPath":"~/git/db-code",
-			"OriginCachedUrl":"https://www.github.com/petervandivier/db-code.git"
+			"LocalPath":"~/git/db-code-Default",
+			"OriginCachedUrl":"https://www.github.com/petervandivier/db-code",
+			"DirectoryFormat":{
+				"StyleName":"fmt_Default",
+				"NestFilesUnder":"DefaultProject/",
+				"IsDatabasePrefixed":true
+			},
+			"FileStyle":{},
+			"DefaultBaseBranch":"develop",
+			"DefaultTargetEnvironment":"prod",
+			"DefaultSourceEnvironment":"qa"
 		},
 		"MyOtherProject":{
-			"LocalPath":"c:/temp/git/db-code",
-			"OriginCachedUrl":"https://www.github.com/petervandivier/db-code.git"
+			"LocalPath":"c:/temp/git/db-code-Other",
+			"OriginCachedUrl":"https://www.github.com/petervandivier/db-code",
+			"DirectoryFormat":{
+				"StyleName":"fmt_Default",
+				"NestFilesUnder":"OtherProject/",
+				"IsDatabasePrefixed":true
+			},
+			"FileStyle":{},
+			"DefaultBaseBranch":"master",
+			"DefaultTargetEnvironment":"prod",
+			"DefaultSourceEnvironment":"qa"
 		}
 	},
 	"ModuleRepo":"~/git/SqlCodeReview",
-	"EnvironmentConfigFile":"~/git/SqlCodeReview/config/default.config.csv",
-	"DirectoryFormat":{
-		"StyleName":"fmt_Default",
-		"IsDatabasePrefixed":true
-	}
+	"EnvironmentConfigFile":"~/git/SqlCodeReview/config/default.config.csv"
 }
