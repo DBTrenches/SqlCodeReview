@@ -14,24 +14,45 @@
         Transform VSTS+SSH remote origin into web-launchable URL.
 #>
     [CmdletBinding()]Param(
-        [Alias('dir','at')]
-            $directory = "."
+         [Alias('dir','at')]
+             $directory = "."
+        ,$project
     )
     $curDir = (Get-Location).Path
+    
+    if(-not [string]::IsNullOrWhiteSpace($project)){
+        try{
+            Write-Verbose "Project [$project] was specified. Inferring repo LocalPath from config."
+            $directory = $sqlCodeReview_DefaultModuleConfig.CodeReviewRepo.$project.LocalPath
+        }
+        catch{
+            throw "An error occured attempting to parse the LocalPath for supplied project [$project]."
+        }
+    }
+
+    if(-not (Test-Path $directory)){
+        throw "Supplied directory [$directory] was not discovered. Process will exit."
+    }
+
     Set-Location $directory
 
     $remoteUrl = (git config --get remote.origin.url)
     $isSsh = $false
     
-    if($remoteUrl.StartsWith("git@github.com:")){
-        $isSsh     = $true
-        $remoteUrl = ($remoteUrl.Replace("git@github.com:","https://github.com/")) -replace ".{4}$"
+    try{
+        if($remoteUrl.StartsWith("git@github.com:")){
+            $isSsh     = $true
+            $remoteUrl = ($remoteUrl.Replace("git@github.com:","https://github.com/")) -replace ".{4}$"
+        }
     }
-
+    catch{
+        $remoteUrl = ""
+    }
+    
     $provider = if($remoteUrl.Contains("github")){ "github" }
         elseif ($remoteUrl.Contains("visualstudio")){ "vsts" }
 
-    $branches    = Get-GitBranch 
+    $branches    = Get-GitBranch -ErrorAction SilentlyContinue
     $branchNames = $branches | Select-Object Name -Unique  
 
     $branches | Where-Object IsLocal | ForEach-Object {

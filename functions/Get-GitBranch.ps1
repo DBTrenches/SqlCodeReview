@@ -1,7 +1,12 @@
 function Get-GitBranch {
 # TODO: handle for not-same directory repo checks
 
-    $branchList = (git branch -a).split("`n")
+    try{
+        $branchList = (git branch -a).split("`n")
+    }
+    catch{
+        Write-Warning "Not a git repo."
+    }
 
     foreach($_line in $branchList) {
         $line       = $_line.Substring(2,($_line.Length)-2)
