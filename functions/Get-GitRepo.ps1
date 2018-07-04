@@ -31,6 +31,21 @@
     $provider = if($remoteUrl.Contains("github")){ "github" }
         elseif ($remoteUrl.Contains("visualstudio")){ "vsts" }
 
+    $branches    = Get-GitBranch 
+    $branchNames = $branches | Select-Object Name -Unique  
+
+    $branches | Where-Object IsLocal | ForEach-Object {
+        $localBranches += @{
+            $PSItem.Name = $PSItem 
+        }
+    }
+
+    $branches | Where-Object IsRemote | ForEach-Object {
+        $remoteBranches += @{
+            $PSItem.Name = $PSItem 
+        }
+    }
+    
     [PSCustomObject]@{
         RootFullPath  = (git rev-parse --show-toplevel) 
         CurrentBranch = (git rev-parse --abbrev-ref HEAD)
@@ -38,7 +53,11 @@
         RemoteURL     = $remoteUrl
         IsSsh         = $isSsh
         Provider      = $provider
-        #Branches      = Get-GitBranch
+        Branches      = @{
+            Names  = $branchNames 
+            Local  = $localBranches
+            Remote = $remoteBranches
+        }
     }
 
     Set-Location $curDir
