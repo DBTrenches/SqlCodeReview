@@ -3,11 +3,11 @@
 
 $repo = Get-GitRepo -dir "./GetGitRepo" -ErrorAction SilentlyContinue
 
-Describe "Testing Get-GitRepo" {
-    It "RootFullPath"  { Test-Path($repo.RootFullPath) | Should -BeTrue }
+Describe "Get-GitRepo" {
+    It "RootFullPath " { Test-Path($repo.RootFullPath) | Should -BeTrue }
     It "CurrentBranch" { $repo.CurrentBranch | Should be "master" }
-    It "IsRepo"        { $repo.IsRepo        | Should -BeTrue     }
-    It "RemoteURL"     { $repo.RemoteURL     | Should be $null    }
-    It "IsSsh"         { $repo.IsSsh         | Should -BeFalse    }
-    It "Provider"      { $repo.Provider      | Should be $null    }
+    It "IsRepo       " { $repo.IsRepo        | Should -BeTrue     }
+    It "RemoteURL    " { $repo.RemoteURL     | Should be $null    }
+    It "IsSsh        " { $repo.IsSsh         | Should -BeFalse    }
+    It "Provider     " { $repo.Provider      | Should be $null    }
 }

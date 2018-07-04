@@ -21,11 +21,11 @@ $db1,$srv_B,(local),$srv_A
 
 $res = Format-SqlObjectList -objList @($obj1<#,$obj2#>) -config $config
 
-Describe "Unit testing Format-SqlObjectList" {
-    It "Raw Name"{$res.RawName | Should be $obj1}
-    It "DB Name"{$res.Database | Should be $db1}
-    It "Schema"{$res.Schema    | Should be $sch1}
-    It "Obj Name"{$res.Name    | Should be $name1}
-    It "Server.Dev" {$res.Server.Dev | Should be $srv_A}
+Describe "Format-SqlObjectList" {
+    It "Raw Name   " {$res.RawName     | Should be $obj1 }
+    It "DB Name    " {$res.Database    | Should be $db1  }
+    It "Schema     " {$res.Schema      | Should be $sch1 }
+    It "Obj Name   " {$res.Name        | Should be $name1}
+    It "Server.Dev " {$res.Server.Dev  | Should be $srv_A}
     It "Server.Prod" {$res.Server.Prod | Should be $srv_B}
 }

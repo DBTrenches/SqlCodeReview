@@ -26,7 +26,7 @@ $sproc_get = Get-SqlObject @connStr -schemaName "dbo" -objectName "sproc_UnitTes
 $tbl_get = Get-SqlObject @connStr -schemaName "dbo" -objectName "tbl_UnitTest"
 
 
-Describe "Unit testing Get-SqlObject for 'sproc'" {
+Describe "Get-SqlObject for 'sproc'" {
         #$sproc_get.definition | Should be $sproc_base.definition 
     It "sproc base_type" {$sproc_get.base_type  | Should be $sproc_base.base_type  }
     It "sproc is_table " {$sproc_get.is_table   | Should be $sproc_base.is_table   }
@@ -37,7 +37,7 @@ Describe "Unit testing Get-SqlObject for 'sproc'" {
     It "sproc id       " {$sproc_get.id         | Should be $sproc_base.id         }
 }
 
-Describe "Unit testing Get-SqlObject for 'tbl'" {
+Describe "Get-SqlObject for 'tbl'" {
         #$tbl_get.definition | Should be $tbl_base.definition 
     It "tbl base_type" {$tbl_get.base_type  | Should be $tbl_base.base_type  }
     It "tbl is_table " {$tbl_get.is_table   | Should be $tbl_base.is_table   }

@@ -12,11 +12,11 @@ $connStr = @{
 
 $baseline = Invoke-SqlCmd @connStr -Query $getBaseline
 
-Describe "Unit test Get-SqlObjectID" {
+Describe "Get-SqlObjectID" {
     It "Stored Proc ID" {
         (Get-SqlObjectID @connStr -objectName "sproc_UnitTest" -schemaName "dbo").id | Should Be $baseline.sproc_id
     }
-    It "Table ID" {
+    It "Table ID      " {
         (Get-SqlObjectID @connStr -objectName "tbl_UnitTest" -schemaName "dbo").id | Should Be $baseline.tbl_id
     }
 }
