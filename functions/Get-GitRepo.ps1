@@ -14,10 +14,11 @@
     Transform VSTS+SSH remote origin into web-launchable URL.
 #>
     [CmdletBinding()]Param(
-        $dir = "."
+        [Alias('dir','at')]
+            $directory = "."
     )
     $curDir = (Get-Location).Path
-    Set-Location $dir
+    Set-Location $directory
 
     $remoteUrl = (git config --get remote.origin.url)
     $isSsh = $false
@@ -37,6 +38,7 @@
         RemoteURL     = $remoteUrl
         IsSsh         = $isSsh
         Provider      = $provider
+        #Branches      = Get-GitBranch
     }
 
     Set-Location $curDir

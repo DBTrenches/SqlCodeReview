@@ -42,7 +42,7 @@
         ,[switch]$BypassForceUpdate
     )
 
-    #begin {
+# region prep vars
         $repo = (Get-GitRepo)
 
         if(-not $repo.IsRepo){
@@ -68,7 +68,7 @@
             $sourceBranch =  ($env:UserName -replace '[^a-zA-Z]', '').Substring(0,6) 
             $sourceBranch += (1..6 | ForEach-Object {'{0:X}' -f (Get-Random -Max 16)}) -join ''
         }
-    #}
+# endregion
 
     $objList = Format-SqlObjectList -objList $objList.Split(',')
 

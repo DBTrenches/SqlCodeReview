@@ -1,19 +1,21 @@
 function Get-GitBranch {
 # TODO: handle for not-same directory repo checks
 
-    (git branch -a).split("`n") | ForEach-Object {
-        $line   = $PSItem.Substring(2,($PSItem.Length)-2)
-        $isCur  = ($PSItem.Substring(0,1) -eq "*")
-        $isRem  = (($line.split("/")[0] -eq "remotes") -and ($line.Substring(7,1) -eq "/"))
-        $remNm  = $line.split("/")[1]
-        $isHEAD = $line.contains("->")
+    $branchList = (git branch -a).split("`n")
 
-        if(-not $isRem){
-            $bName = $line
+    foreach($_line in $branchList) {
+        $line       = $_line.Substring(2,($_line.Length)-2)
+        $isCurrent  = ($_line.Substring(0,1) -eq "*")
+        $isRemote   = (($line.split("/")[0] -eq "remotes") -and ($line.Substring(7,1) -eq "/"))
+        $remoteName = $line.split("/")[1]
+        $isHEAD     = $line.contains("->")
+
+        if(-not $isRemote){
+            $branchName = $line
         } 
 
-        if($isRem){
-            $bName = $line.split("/")[2..20] -join '/' # TODO: make this suck less
+        if($isRemote){
+            $branchName = $line.split("/")[2..20] -join '/' # TODO: make this suck less
         } 
 
         if($isHEAD){
@@ -23,12 +25,12 @@ function Get-GitBranch {
         }
 
         [PSCustomObject] @{
-            Type       = if($isRem){"remote"}else{"local"}
-            Name       = $bName
-            IsLocal    = (-not $isRem)
-            IsRemote   = $isRem
-            RemoteName = $remNm
-            IsCurrent  = $isCur
+            Type       = if($isRemote){"remote"}else{"local"}
+            Name       = $branchName
+            IsLocal    = (-not $isRemote)
+            IsRemote   = $isRemote
+            RemoteName = $remoteName
+            IsCurrent  = $isCurrent
             IsHEAD     = $isHEAD.LocalRef
             Exists     = $true
         }
