@@ -18,7 +18,7 @@ function Format-SqlObjectList {
     [CmdletBinding()]Param(
          [string[]]$objList
         #,[string]$env
-        ,$config
+        ,$config = $sqlCodeReview_DefaultServerConfig
     )
 
     $objList | ForEach-Object {

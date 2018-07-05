@@ -83,9 +83,7 @@
 
 #1 prod srvr to repo
     Write-SqlObjListToLocalPath `
-        -FromServer $targetServer `
-        -objList    $objList `
-        -env        $targetEnv `
+        -objList    $objList ` # -env        $targetEnv `
         -Verbose
 
     Write-Verbose "TARGET: Adding, committing, publishing branch and pushing"
@@ -98,9 +96,7 @@
 
 #3 dev srvr to repo
     Write-SqlObjListToLocalPath `
-        -FromServer $sourceServer `
-        -objList    $objList `
-        -env        $sourceEnv `
+        -objList    $objList ` #-env        $sourceEnv `
         -Verbose
 
     Write-Verbose "SOURCE: Adding, committing, publishing branch and pushing"

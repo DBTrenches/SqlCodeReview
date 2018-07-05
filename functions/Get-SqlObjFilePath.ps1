@@ -4,12 +4,13 @@
 .EXAMPLE
     $objs = Format-SqlObjectList -objList @("foo.bar.blah","bork..bork") 
     $objs | Add-Member -Name "Type" -Value "tables" -type noteproperty
-    $objs | Get-SqlObjFilePath -PrefixDB -Verbose
+
+    $objs | Get-SqlObjFilePath -project "MyOtherProject" -Verbose
+    $objs | Get-SqlObjFilePath -Verbose
     
 #>
     [CmdletBinding()]Param(
-         [Parameter(ValidateNotNullOrEmpty)]
-            $formatStyle = "fmt_Default"
+         [string]$project = "default"
         ,[Parameter(
             ValueFromPipeline=$true,    
             ValueFromPipelineByPropertyName=$true)]
@@ -26,29 +27,35 @@
             ValueFromPipeline=$true,    
             ValueFromPipelineByPropertyName=$true)]
             [string]$type
-        ,[Switch]$PrefixDB
     )
     Begin {
-        $repoRoot = (Get-GitRepo).RootFullPath
+        $formatStyle = $sqlCodeReview_DefaultModuleConfig.CodeReviewRepo.$project.DirectoryFormat.StyleName
+        $nestUnder   = $sqlCodeReview_DefaultModuleConfig.CodeReviewRepo.$project.DirectoryFormat.NestFilesUnder
+        $isPrefixDB  = $sqlCodeReview_DefaultModuleConfig.CodeReviewRepo.$project.DirectoryFormat.IsDatabasePrefixed
+        $directory   = $sqlCodeReview_DefaultModuleConfig.CodeReviewRepo.$project.LocalPath
+
+        if(-not ([string]::IsNullOrWhiteSpace($nestUnder))){
+            $directory += "/$nestUnder"
+        }
     }
 
     Process {
         $DBPrefix = ""
-        if($PrefixDB){$DBPrefix = "/$Database"}
+        if($isPrefixDB){$DBPrefix = "/$Database"}
 
         Switch($formatStyle)
         {
             "fmt_SchemaType" { 
-                $filePath   = "$repoRoot$DBPrefix/$schema/$type/$name.sql"
-                $folderPath = "$repoRoot$DBPrefix/$schema/$type"
+                $filePath   = "$directory$DBPrefix/$schema/$type/$name.sql"
+                $folderPath = "$directory$DBPrefix/$schema/$type"
             }
             "fmt_Default"    { 
-                $filePath   = "$repoRoot$DBPrefix/$type/$schema.$name.sql"
-                $folderPath = "$repoRoot$DBPrefix/$type"
+                $filePath   = "$directory$DBPrefix/$type/$schema.$name.sql"
+                $folderPath = "$directory$DBPrefix/$type"
             }
             "fmt_TypeSchema" { 
-                $filePath   = "$repoRoot$DBPrefix/$type/$schema/$name.sql"
-                $folderPath = "$repoRoot$DBPrefix/$type/$schema"
+                $filePath   = "$directory$DBPrefix/$type/$schema/$name.sql"
+                $folderPath = "$directory$DBPrefix/$type/$schema"
             }
         }
         

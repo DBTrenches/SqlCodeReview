@@ -7,6 +7,8 @@ function Get-SqlServerFromConfig {
 
 .EXAMPLE
     Get-SqlServerFromConfig "foo"
+    Get-SqlServerFromConfig ""
+    Get-SqlServerFromConfig $null
 #>
     [CmdletBinding()]Param(
          [string]$database
