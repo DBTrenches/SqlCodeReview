@@ -15,18 +15,17 @@
                 2) read the definition of each object from both the "source" and "target" servers
                 3) write the current definition of each object to a corresponding git branch
                 4) launch a web session to request a code review by way of a pull request
-        By default, we make the "target" a static branch named "develop". This allows for
+        By default, we make the "target" a static branch defined in the config. This allows for
             multiple concurrent code reviews to be approved separately but deployed together. 
-
-    .PARAMETER BypassForceUpdate
-        During typical use, we want to force devs onto the latest version of the module 
-            PRIOR TO intteracting with the repo. When someone complains that "a thing went wrong!",
-            you only want to have one version of the module to debug
-        For local testing & advanced usage, specify this flag to skip an forceful override.
-
+        
     .PARAMETER LocalOnly
         DO NOT auto-push to the remote. 
     
+    .PARAMETER Project
+        All work is done in the directory of the $project defined in your invocation. 
+        Details of the locations for this $project are defined in the config file 
+            saved alongside your local copy of the module code and imported with the module. 
+        Updating these config values will only take effect when you re-import the module.
 #>
     [cmdletbinding()]Param(
          [parameter(mandatory=$true)]

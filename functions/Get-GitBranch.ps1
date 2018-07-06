@@ -1,6 +1,13 @@
 function Get-GitBranch {
-# TODO: handle for not-same directory repo checks
+<# 
+    .SYNOPSIS
+        Parse "git branch -a" into a PSCustomObject
 
+    .TODO 
+        Parameterize for not-same directory repo checks? 
+        Would just reuse Push/Pop logic from Get-GitRepo...
+        ...maybe isolate that code for reuseability with "-at" param?
+#>
     try{
         $branchList = (git branch -a).split("`n")
     }
