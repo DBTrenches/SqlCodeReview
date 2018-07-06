@@ -12,7 +12,7 @@
         Given a secured-but-readable "prod" environment and a fully open "qa" evironment, 
             the default behavior of this function is to...
                 1) format a list of objects to be reviewed
-                2) read the definition of each object from both the "source" and "target" servers
+                2) read the definition of each object from both the "source" and "target" environments
                 3) write the current definition of each object to a corresponding git branch
                 4) launch a web session to request a code review by way of a pull request
         By default, we make the "target" a static branch defined in the config. This allows for
@@ -31,12 +31,10 @@
          [parameter(mandatory=$true)]
             [ValidateNotNullOrEmpty()]
             [string[]]$objList
-        ,[string]$sourceBranch
-        ,[string]$targetBranch
-        ,[string]$sourceServer
-        ,[string]$targetServer
-        ,[string]$targetEnv
-        ,[string]$sourceEnv
+        #,[string]$sourceBranch
+        #,[string]$targetBranch
+        #,[string]$targetEnv
+        #,[string]$sourceEnv
         ,[switch]$localOnly
         ,[string]$project = "Default"
     )
@@ -71,22 +69,18 @@
         $sourceBranch =  ($env:UserName -replace '[^a-zA-Z]', '').Substring(0,6) 
         $sourceBranch += (1..6 | ForEach-Object {'{0:X}' -f (Get-Random -Max 16)}) -join ''
     }
-# endregion
-
     git fetch 
     Enter-GitBranch -branchName $targetBranch -Force
 
-    # $prLog = $objList | ConvertTo-Csv 
-    # $prLog | Out-File "log/$($sourceBranch)_PRLOG.csv" -Encoding ascii -Force
+# endregion
 
 #1 target srvr to repo
     $objList = Format-SqlObjectList -objList $objList.Split(',') -env $targetEnv
     
     Write-SqlObjListToLocalPath -objList $objList 
 
-    Write-Verbose "TARGET: Adding, committing, publishing branch and pushing"
     git add .
-    git commit -m "Syncing state from $targetServer/$targetEnv For '$targetBranch'."
+    git commit -m "Syncing state from $targetEnv For '$targetBranch'."
     if($LocalOnly){}else{git push -u origin $targetBranch}
 
 #2 already in prod-base. moving FROM here TO dev-base keeps diff fwd-only
@@ -97,9 +91,8 @@
     
     Write-SqlObjListToLocalPath -objList $objList 
 
-    Write-Verbose "SOURCE: Adding, committing, publishing branch and pushing"
     git add .
-    git commit -m "Syncing state from $sourceServer/$sourceEnv for '$sourceBranch'."
+    git commit -m "Syncing state from $sourceEnv for '$sourceBranch'."
     if($LocalOnly){
     }else{git push -u origin $sourceBranch}
 
