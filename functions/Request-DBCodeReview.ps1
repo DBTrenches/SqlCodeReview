@@ -43,7 +43,7 @@
     )
 
 # region prep vars
-    $curDir = (Get-Location).Path    
+    Push-Location 
     $directory = $sqlCodeReview_DefaultModuleConfig.CodeReviewRepo.$project.LocalPath
 
     $repo = Get-GitRepo -at $directory
@@ -128,5 +128,5 @@
         Enter-GitBranch $curBranch
         Start-Process chrome $prUrl
     }
-    Set-Location $curDir
+    Pop-Location
 }

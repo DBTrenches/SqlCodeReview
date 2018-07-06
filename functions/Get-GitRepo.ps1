@@ -18,7 +18,7 @@
              $directory = "."
         ,$project
     )
-    $curDir = (Get-Location).Path
+    Push-Location
     
     if(-not [string]::IsNullOrWhiteSpace($project)){
         try{
@@ -81,5 +81,5 @@
         }
     }
 
-    Set-Location $curDir
+    Pop-Location
 }
