@@ -1,4 +1,6 @@
 ﻿# setup test
+# TODO: https://github.com/pester/Pester/wiki/TestDrive
+#   so that mid-test aborts don't leave garbage in the filesystem
 
 New-Item -ItemType Directory -Name "GetGitRepo" | Out-Null
 Set-Location -Path "./GetGitRepo"

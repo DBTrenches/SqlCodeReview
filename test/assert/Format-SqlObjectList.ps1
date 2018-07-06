@@ -12,6 +12,7 @@ $obj2 = "$db2.$sch2.$name2"
 #>
 $srv_A = "127.0.0.1"
 $srv_B = "localhost"
+$env   = "dev"
 
 $config = @"
 Database,Prod,QA,Dev
@@ -19,13 +20,14 @@ $db1,$srv_B,(local),$srv_A
 *,$srv_B,(local),$srv_A
 "@ | ConvertFrom-Csv
 
-$res = Format-SqlObjectList -objList @($obj1<#,$obj2#>) -config $config
+$res = Format-SqlObjectList -objList @($obj1<#,$obj2#>) -config $config -env $env
 
 Describe "Format-SqlObjectList" {
     It "Raw Name   " {$res.RawName     | Should be $obj1 }
     It "DB Name    " {$res.Database    | Should be $db1  }
     It "Schema     " {$res.Schema      | Should be $sch1 }
     It "Obj Name   " {$res.Name        | Should be $name1}
-    It "Server.Dev " {$res.Server.Dev  | Should be $srv_A}
-    It "Server.Prod" {$res.Server.Prod | Should be $srv_B}
+    #It "Server.Dev " {$res.Server.Dev  | Should be $srv_A}
+    #It "Server.Prod" {$res.Server.Prod | Should be $srv_B}
+    It "Server.$env" {$res.Server     | Should be $srv_A}
 }

@@ -9,15 +9,16 @@ function Format-SqlObjectList {
         for requested environment based on local config. 
 
 .EXAMPLE
-    Format-SqlObjectList -objList @("foo.bar.blah","bork..bork")
-    (Format-SqlObjectList -objList @("foo.bar.blah","bork..bork")).Server.dev
+    Format-SqlObjectList -objList @("foo.bar.blah","bork..bork") -env "prod"
 
 .TODO
     1) Add support for inferred DB name?
 #>
     [CmdletBinding()]Param(
          [string[]]$objList
-        #,[string]$env
+        ,[Parameter(Mandatory=$true)]
+            [ValidateNotNullOrEmpty()]
+            [string]$env
         ,$config = $sqlCodeReview_DefaultServerConfig
     )
 
@@ -29,7 +30,7 @@ function Format-SqlObjectList {
         if([string]::IsNullOrWhiteSpace($schemaName)){$schemaName="dbo"}      
         
         [PSCustomObject] @{
-            Server   = (Get-SqlServerFromConfig -Database $DatabaseName -config $config)
+            Server   = (Get-SqlServerFromConfig -Database $DatabaseName -config $config).$env
             Database = $DatabaseName
             Schema   = $schemaName
             Name     = $objectName
