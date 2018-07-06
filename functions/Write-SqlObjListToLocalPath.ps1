@@ -20,7 +20,7 @@
         
         $isOnDisk = (Write-SqlObjectToLocalPath @object @repoStyle).IsOnDisk
 
-        Add-Member -MemberType Property -Name Object   -Value $obj
-        Add-Member -MemberType Property -Name IsOnDisk -Value $isOnDisk
+        Add-Member -MemberType NoteProperty -Name Object   -Value $obj
+        Add-Member -MemberType NoteProperty -Name IsOnDisk -Value $isOnDisk
     }
 }

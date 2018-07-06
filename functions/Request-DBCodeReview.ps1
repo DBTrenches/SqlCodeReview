@@ -78,7 +78,8 @@
     git fetch 
     Enter-GitBranch -branchName $targetBranch -Force
 
-    $objList | ConvertTo-Csv | Out-File "log/$($sourceBranch)_PRLOG.csv" -Encoding ascii -Force
+    #$prLog = $objList | ConvertTo-Csv 
+    #$prLog | Out-File "log/$($sourceBranch)_PRLOG.csv" -Encoding ascii -Force
 
 #1 prod srvr to repo
     Write-SqlObjListToLocalPath `

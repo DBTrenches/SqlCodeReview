@@ -1,4 +1,5 @@
-﻿Set-Location ~\git\SqlCodeReview
+﻿Push-Location
+Set-Location $PSScriptRoot\..
 try {    
     Import-Module .\SqlCodeReview.psd1 -Force
     $go = $true
@@ -9,7 +10,7 @@ catch {
 }
 
 if($go){
-    Set-Location "$((Get-GitRepo).RootFullPath)\test"
+    Set-Location $PSScriptRoot
     
     $setup   = Get-ChildItem ".\setup\*.ps1" 
     $assert  = Get-ChildItem ".\assert\*.ps1" 
@@ -19,3 +20,4 @@ if($go){
     $assert  | % {. ".\assert\$($_.Name)"} 
     $cleanup | % {. ".\cleanup\$($_.Name)"} 
 }    
+Pop-Location
