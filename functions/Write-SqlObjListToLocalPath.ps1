@@ -8,9 +8,13 @@
          $objList
         ,[Parameter(Mandatory=$true)]
             [ValidateNotNullOrEmpty()]$project = "Default"
+        ,[string]$envChoice
     )
+    
+    $env = $sqlCodeReview_DefaultModuleConfig.CodeReviewRepo.$project."Default$($envChoice)Environment"
+    $objArray = Format-SqlObjectList -objList $objList.Split(',') -env $env
 
-    $objList | ForEach-Object {
+    $objArray | ForEach-Object {
         $dbObject = Get-SqlObject `
             -server     $_.server `
             -database   $_.database `

@@ -33,8 +33,6 @@
             [string[]]$objList
         #,[string]$sourceBranch
         #,[string]$targetBranch
-        #,[string]$targetEnv
-        #,[string]$sourceEnv
         ,[switch]$localOnly
         ,[string]$project = "Default"
     )
@@ -55,18 +53,12 @@
 
     $curBranch = $repo.CurrentBranch
 
-    if([string]::IsNullOrWhiteSpace($targetEnv)){
-        $targetEnv = $sqlCodeReview_DefaultModuleConfig.CodeReviewRepo.$project.DefaultTargetEnvironment
-    }
-    if([string]::IsNullOrWhiteSpace($sourceEnv)){
-        $sourceEnv = $sqlCodeReview_DefaultModuleConfig.CodeReviewRepo.$project.DefaultSourceEnvironment
-    }
-
     if(-not (Assert-GitBranch $targetBranch).Exists){
         $targetBranch = $sqlCodeReview_DefaultModuleConfig.CodeReviewRepo.$project.DefaultBaseBranch
     }
     if(-not (Assert-GitBranch $sourceBranch).Exists){
         $sourceBranch =  ($env:UserName -replace '[^a-zA-Z]', '').Substring(0,6) 
+        $sourceBranch += "_"
         $sourceBranch += (1..6 | ForEach-Object {'{0:X}' -f (Get-Random -Max 16)}) -join ''
     }
     git fetch 
@@ -75,9 +67,7 @@
 # endregion
 
 #1 target srvr to repo
-    $objList = Format-SqlObjectList -objList $objList.Split(',') -env $targetEnv
-    
-    Write-SqlObjListToLocalPath -objList $objList -project $project
+    Write-SqlObjListToLocalPath -objList $objList -project $project -envChoice "Target"
 
     git add .
     git commit -m "Syncing state from $targetEnv For '$targetBranch'."
@@ -87,9 +77,7 @@
     Enter-GitBranch -branchName $sourceBranch -Force
 
 #3 source srvr to repo
-    $objList = Format-SqlObjectList -objList $objList.Split(',') -env $sourceEnv
-    
-    Write-SqlObjListToLocalPath -objList $objList -project $project
+    Write-SqlObjListToLocalPath -objList $objList -project $project -envChoice "Source"
 
     git add .
     git commit -m "Syncing state from $sourceEnv for '$sourceBranch'."

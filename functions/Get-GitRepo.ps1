@@ -42,15 +42,19 @@
     try{
         if($remoteUrl.StartsWith("git@github.com:")){
             $isSsh     = $true
-            $remoteUrl = ($remoteUrl.Replace("git@github.com:","https://github.com/")) -replace ".{4}$"
+            $remoteUrl = ($remoteUrl.Replace("git@github.com:","https://github.com/")) 
         }
     }
     catch{
         $remoteUrl = ""
     }
     
-    $provider = if($remoteUrl.Contains("github")){ "github" }
-        elseif ($remoteUrl.Contains("visualstudio")){ "vsts" }
+    if($remoteUrl.Contains("github")){ $provider = "github" }
+    elseif($remoteUrl.Contains("visualstudio")){ $provider =  "vsts" }
+
+    if($provider -eq "github"){
+        $remoteUrl = $remoteUrl -replace ".{4}$" # trim ".git" from url
+    }
 
     $branches    = Get-GitBranch -ErrorAction SilentlyContinue
     $branchNames = $branches | Select-Object Name -Unique  
