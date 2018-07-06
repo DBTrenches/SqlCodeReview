@@ -1,23 +1,23 @@
 ﻿Function Write-SqlObjectToLocalPath {
     [cmdletbinding()]Param(
         [parameter(Mandatory=$true)]
-            [Alias('Server','SqlServer','ServerInstance')]
-            [string]$InstanceName
+            [Alias('InstanceName','SqlServer','ServerInstance')]
+            [string]$Server
         ,[parameter(Mandatory=$true)]
-            [Alias('Database','dbName')]
-            [string]$DatabaseName
+            [Alias('DatabaseName','dbName')]
+            [string]$Database
         ,[parameter(Mandatory=$true)]
-            [Alias('Schema')]
-            [string]$SchemaName
+            [Alias('SchemaName')]
+            [string]$Schema
         ,[parameter(Mandatory=$true)]
-            [Alias('Object','Name')]
-            [string]$ObjectName
+            [Alias('ObjectName','Name')]
+            [string]$Object
         ,[parameter(Mandatory=$true)]
-            [Alias('TypeName','Type')]
-            [string]$ObjectType
+            [Alias('ObjectType','TypeName')]
+            [string]$Type
         ,[parameter(Mandatory=$true)]
-            [Alias('Definition')]
-            [string]$ObjectDefinition
+            [Alias('ObjectDefinition')]
+            [string]$Definition
         ,[parameter(Mandatory=$true)]
             [bool]$Exists
         ,[string]$project = "Default"
@@ -25,29 +25,29 @@
 
     $path = Get-SqlObjFilePath `
         -project  $project `
-        -Database $DatabaseName `
-        -Schema   $SchemaName `
-        -Object   $ObjectName `
-        -Type     $ObjectType 
+        -database $Database `
+        -schema   $Schema `
+        -object   $Object `
+        -type     $Type 
 
-    $filePath   = $path.FilePath
-    $folderPath = $path.FolderPath
+    $fullPath   = $path.fullPath
+    $folderPath = $path.folder
 
     if($Exists){
         if(-not (Test-Path $folderPath)){
             New-Item -Path $folderPath -ItemType Directory -Force | Out-Null
         }
-        Write-Verbose "Writing object '$SchemaName.$ObjectName' to '$filePath'"
-        $ObjectDefinition | New-Item -ItemType File -Path $filePath -Force | Out-Null
+        Write-Verbose "Writing object '$Schema.$Object' to '$fullPath'"
+        $Definition | New-Item -ItemType File -Path $fullPath -Force | Out-Null
     }else{
-        Write-Verbose "Object '$SchemaName.$ObjectName' not found at '$InstanceName;$DatabaseName'."
-        if(Test-Path $filePath){
-            Write-Verbose "Attempting deletion of $filePath."
-            Remove-Item -Path $filePath -Force
+        Write-Verbose "Object '$Schema.$Object' not found at '$Server;$Database'."
+        if(Test-Path $fullPath){
+            Write-Verbose "Attempting deletion of $fullPath."
+            Remove-Item -Path $fullPath -Force
         }
     }
 
     #[PSCustomObject]@{
-    #    IsOnDisk = Test-Path $filePath
+    #    IsOnDisk = Test-Path $fullPath
     #}
 }

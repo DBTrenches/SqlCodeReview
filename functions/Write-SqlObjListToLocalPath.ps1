@@ -5,29 +5,26 @@
     Retrieves & appends the object_id & calls Write-SqlObjectToLocalPath for each
 #>
     [cmdletbinding()]Param(
-         [parameter(Mandatory=$true)]$objList
-        ,[ValidateNotNullOrEmpty()]$project = "Default"
+         $objList
+        ,[Parameter(Mandatory=$true)]
+            [ValidateNotNullOrEmpty()]$project = "Default"
     )
 
     $objList | ForEach-Object {
-        $object = Get-SqlObject `
-            -serverInstance $_.Server `
-            -databaseName   $_.Database `
-            -schemaName     $_.Schema `
-            -objectName     $_.Name 
+        $dbObject = Get-SqlObject `
+            -server     $_.server `
+            -database   $_.database `
+            -schema     $_.schema `
+            -object     $_.name 
 
-        # $object | 
         Write-SqlObjectToLocalPath `
-            -InstanceName   $_.Server `
-            -databaseName   $_.Database `
-            -schemaName     $_.Schema `
-            -objectName     $_.Name `
-            -objectType     $object.base_type `
-            -Definition     $object.definition `
-            -Exists         $object.exists `
-            -project $project
-
-        #Add-Member -MemberType NoteProperty -Name Object   -Value $obj
-        #Add-Member -MemberType NoteProperty -Name IsOnDisk -Value $isOnDisk
+            -server     $_.server `
+            -database   $_.database `
+            -schema     $_.schema `
+            -object     $_.name `
+            -type       $dbObject.base_type `
+            -definition $dbObject.definition `
+            -exists     $dbObject.exists `
+            -project    $project
     }
 }

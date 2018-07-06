@@ -12,25 +12,25 @@ function Get-SqlObjectID {
 #>
     [CmdletBinding()]Param(
          [Parameter(Mandatory=$true)]
-            [Alias('serverName','sqlServer','server')]
-            [string]$serverInstance
+            [Alias('serverName','sqlServer','serverInstance')]
+            [string]$server
         ,[Parameter(Mandatory=$true)]
-            [Alias('database','dbName')]
-            [string]$databaseName
+            [Alias('databaseName','dbName')]
+            [string]$database
         ,[Parameter(Mandatory=$true)]
-			[Alias('schema')]
-            [string]$schemaName
+			[Alias('schemaName')]
+            [string]$schema
         ,[Parameter(Mandatory=$true)]
-			[Alias('object','name')]
-            [string]$objectName
+			[Alias('objectName','name')]
+            [string]$object
     )
 
-    $objectName     = (Get-SqlQuoteNameSparse -text $objectName).text
-    $schemaName     = (Get-SqlQuoteNameSparse -text $schemaName).text
-    $objectFullName = "$schemaName.$objectName"
+    $object     = (Get-SqlQuoteNameSparse -text $object).text
+    $schema     = (Get-SqlQuoteNameSparse -text $schema).text
+    $objectFullName = "$schema.$object"
 
     $sql_objId = "select [object_id] = isnull(object_id(@object_full_name),0);"
-    $conn=new-object data.sqlclient.sqlconnection "Server=$serverInstance;Initial Catalog=$databaseName;Integrated Security=True"
+    $conn=new-object data.sqlclient.sqlconnection "Server=$server;Initial Catalog=$database;Integrated Security=True"
     $conn.open()
     $cmd=new-object system.Data.SqlClient.SqlCommand($sql_objId,$conn)
     $cmd.CommandTimeout=1

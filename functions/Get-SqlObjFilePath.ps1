@@ -2,7 +2,7 @@
 <#
 
 .EXAMPLE
-    $objs = Format-SqlObjectList -objList @("foo.bar.blah","bork..bork") 
+    $objs = Format-SqlObjectList -objList @("foo.bar.blah","bork..bork") -env prod
     $objs | Add-Member -Name "Type" -Value "tables" -type noteproperty
 
     $objs | Get-SqlObjFilePath -project "MyOtherProject" -Verbose
@@ -36,10 +36,10 @@
         $formatStyle = $sqlCodeReview_DefaultModuleConfig.CodeReviewRepo.$project.DirectoryFormat.StyleName
         $nestUnder   = $sqlCodeReview_DefaultModuleConfig.CodeReviewRepo.$project.DirectoryFormat.NestFilesUnder
         $isPrefixDB  = $sqlCodeReview_DefaultModuleConfig.CodeReviewRepo.$project.DirectoryFormat.IsDatabasePrefixed
-        $directory   = $sqlCodeReview_DefaultModuleConfig.CodeReviewRepo.$project.LocalPath
+        $repoRoot    = $sqlCodeReview_DefaultModuleConfig.CodeReviewRepo.$project.LocalPath
 
         if(-not ([string]::IsNullOrWhiteSpace($nestUnder))){
-            $directory += "/$nestUnder"
+            $repoRoot += "/$nestUnder"
         }
     }
 
@@ -50,28 +50,29 @@
         Switch($formatStyle)
         {
             "fmt_SchemaType" { 
-                $fileName   = "$name.sql"
-                $folderPath = "$directory$DBPrefix/$schema/$type/"
+                $file   = "$name.sql"
+                $folder = "$repoRoot$DBPrefix/$schema/$type/"
             }
             "fmt_Default"    { 
-                $fileName   = "$schema.$name.sql"
-                $folderPath = "$directory$DBPrefix/$type/"
+                $file   = "$schema.$name.sql"
+                $folder = "$repoRoot$DBPrefix/$type/"
             }
             "fmt_TypeSchema" { 
-                $fileName   = "$name.sql"
-                $folderPath = "$directory$DBPrefix/$type/$schema/"
+                $file   = "$name.sql"
+                $folder = "$repoRoot$DBPrefix/$type/$schema/"
             }
         }
         
-        while($folderPath.IndexOf(" /") -ne -1){
-            $folderPath = $folderPath -Replace(" /","/")
+# if any parts used to construct the folder path have trailing whitespace, trim it here
+        while($folder.IndexOf(" /") -ne -1){
+            $folder = $folder -Replace(" /","/")
         }
-        $filePath = "$folderPath$fileName"
+        $fullPath = "$folder$file"
 
         [PSCustomObject] @{
-            FileName   = $fileName
-            FilePath   = $filePath
-            FolderPath = $folderPath
+            file     = $file
+            fullPath = $fullPath
+            folder   = $folder
         }
     }
 }

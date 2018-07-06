@@ -77,7 +77,7 @@
 #1 target srvr to repo
     $objList = Format-SqlObjectList -objList $objList.Split(',') -env $targetEnv
     
-    Write-SqlObjListToLocalPath -objList $objList 
+    Write-SqlObjListToLocalPath -objList $objList -project $project
 
     git add .
     git commit -m "Syncing state from $targetEnv For '$targetBranch'."
@@ -89,7 +89,7 @@
 #3 source srvr to repo
     $objList = Format-SqlObjectList -objList $objList.Split(',') -env $sourceEnv
     
-    Write-SqlObjListToLocalPath -objList $objList 
+    Write-SqlObjListToLocalPath -objList $objList -project $project
 
     git add .
     git commit -m "Syncing state from $sourceEnv for '$sourceBranch'."

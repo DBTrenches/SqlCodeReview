@@ -9,25 +9,25 @@ function Get-SqlObject {
 #>
     [CmdletBinding()]Param(
          [Parameter(Mandatory=$true)]
-            [Alias('serverName','sqlServer','server')]
-            [string]$serverInstance
+            [Alias('serverName','sqlServer','serverInstance')]
+            [string]$server
         ,[Parameter(Mandatory=$true)]
-            [Alias('database','dbName')]
-            [string]$databaseName
+            [Alias('databaseName','dbName')]
+            [string]$database
         ,[Parameter(Mandatory=$true)]
-			[Alias('schema')]
-            [string]$schemaName
+			[Alias('schemaName')]
+            [string]$schema
         ,[Parameter(Mandatory=$true)]
-			[Alias('object','name')]
-            [string]$objectName
+			[Alias('objectName','name')]
+            [string]$object
     )
 
     $conn = @{
-        ServerInstance = $serverInstance
-        Database       = $databaseName
+        ServerInstance = $server
+        Database       = $database
     }
 
-    $objectId = (Get-SqlObjectID @conn -schemaName $schemaName -objectName $objectName).id
+    $objectId = (Get-SqlObjectID @conn -schemaName $schema -objectName $object).id
 
     $sql_GetObject = @"
 select 
@@ -41,13 +41,13 @@ select
     ,id           = $objectId
 "@
 
-    $object = (Invoke-SqlCmd @conn -query $sql_GetObject)
+    $dbObject = (Invoke-SqlCmd @conn -query $sql_GetObject)
 
-    if($object.is_table){
-        $object.definition = (Get-SqlCreateTable @conn -tableId $objectId).createTableCommand
+    if($dbObject.is_table){
+        $dbObject.definition = (Get-SqlCreateTable @conn -tableId $objectId).createTableCommand
     }
 
-    $object | ForEach-Object {
+    $dbObject | ForEach-Object {
         [PSCustomObject]@{
             definition = $PSItem.definition
             base_type  = $PSItem.base_type
