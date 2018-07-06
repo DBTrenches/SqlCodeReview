@@ -57,6 +57,7 @@ select
             schema     = (Get-SqlQuoteNameSparse -text $PSItem.schema).text
             name       = (Get-SqlQuoteNameSparse -text $PSItem.name).text
             id         = $PSItem.id
+            exists     = ($PSItem.id -ne 0)
         }
     }
 }

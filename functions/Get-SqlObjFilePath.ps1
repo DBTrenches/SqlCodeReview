@@ -14,18 +14,22 @@
         ,[Parameter(
             ValueFromPipeline=$true,    
             ValueFromPipelineByPropertyName=$true)]
+            [Alias('DatabaseName','dbName')]
             [string]$Database
         ,[Parameter(
             ValueFromPipeline=$true,    
             ValueFromPipelineByPropertyName=$true)]
+            [Alias('SchemaName')]
             [string]$schema
         ,[Parameter(
             ValueFromPipeline=$true,    
             ValueFromPipelineByPropertyName=$true)]
+            [Alias('Object','ObjectName')]
             [string]$name
         ,[Parameter(
             ValueFromPipeline=$true,    
             ValueFromPipelineByPropertyName=$true)]
+            [Alias('ObjectType','ObjectTypeName')]
             [string]$type
     )
     Begin {
@@ -46,22 +50,28 @@
         Switch($formatStyle)
         {
             "fmt_SchemaType" { 
-                $filePath   = "$directory$DBPrefix/$schema/$type/$name.sql"
-                $folderPath = "$directory$DBPrefix/$schema/$type"
+                $fileName   = "$name.sql"
+                $folderPath = "$directory$DBPrefix/$schema/$type/"
             }
             "fmt_Default"    { 
-                $filePath   = "$directory$DBPrefix/$type/$schema.$name.sql"
-                $folderPath = "$directory$DBPrefix/$type"
+                $fileName   = "$schema.$name.sql"
+                $folderPath = "$directory$DBPrefix/$type/"
             }
             "fmt_TypeSchema" { 
-                $filePath   = "$directory$DBPrefix/$type/$schema/$name.sql"
-                $folderPath = "$directory$DBPrefix/$type/$schema"
+                $fileName   = "$name.sql"
+                $folderPath = "$directory$DBPrefix/$type/$schema/"
             }
         }
         
+        while($folderPath.IndexOf(" /") -ne -1){
+            $folderPath = $folderPath -Replace(" /","/")
+        }
+        $filePath = "$folderPath$fileName"
+
         [PSCustomObject] @{
+            FileName   = $fileName
             FilePath   = $filePath
-            folderPath = $folderPath
+            FolderPath = $folderPath
         }
     }
 }

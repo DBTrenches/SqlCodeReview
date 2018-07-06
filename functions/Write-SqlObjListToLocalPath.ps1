@@ -9,18 +9,25 @@
         ,[ValidateNotNullOrEmpty()]$project = "Default"
     )
 
-    $repoStyle = @{
-        formatStyle = $sqlCodeReview_DefaultModuleConfig.CodeReviewRepo.$project.DirectoryFormat.StyleName
-        nestUnder   = $sqlCodeReview_DefaultModuleConfig.CodeReviewRepo.$project.DirectoryFormat.NestFilesUnder
-        dbPrefix    = $sqlCodeReview_DefaultModuleConfig.CodeReviewRepo.$project.DirectoryFormat.IsDatabasePrefixed
-    }
-
     $objList | ForEach-Object {
-        $object = Get-SqlObject @PSItem 
-        
-        $isOnDisk = (Write-SqlObjectToLocalPath @object @repoStyle).IsOnDisk
+        $object = Get-SqlObject `
+            -serverInstance $_.Server `
+            -databaseName   $_.Database `
+            -schemaName     $_.Schema `
+            -objectName     $_.Name 
 
-        Add-Member -MemberType NoteProperty -Name Object   -Value $obj
-        Add-Member -MemberType NoteProperty -Name IsOnDisk -Value $isOnDisk
+        # $object | 
+        Write-SqlObjectToLocalPath `
+            -InstanceName   $_.Server `
+            -databaseName   $_.Database `
+            -schemaName     $_.Schema `
+            -objectName     $_.Name `
+            -objectType     $object.base_type `
+            -Definition     $object.definition `
+            -Exists         $object.exists `
+            -project $project
+
+        #Add-Member -MemberType NoteProperty -Name Object   -Value $obj
+        #Add-Member -MemberType NoteProperty -Name IsOnDisk -Value $isOnDisk
     }
 }

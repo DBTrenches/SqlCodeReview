@@ -71,8 +71,6 @@
         $sourceBranch =  ($env:UserName -replace '[^a-zA-Z]', '').Substring(0,6) 
         $sourceBranch += (1..6 | ForEach-Object {'{0:X}' -f (Get-Random -Max 16)}) -join ''
     }
-
-    $objList = Format-SqlObjectList -objList $objList.Split(',')
 # endregion
 
     git fetch 
@@ -81,10 +79,10 @@
     # $prLog = $objList | ConvertTo-Csv 
     # $prLog | Out-File "log/$($sourceBranch)_PRLOG.csv" -Encoding ascii -Force
 
-#1 prod srvr to repo
-    Write-SqlObjListToLocalPath `
-        -objList    $objList ` # -env        $targetEnv `
-        -Verbose
+#1 target srvr to repo
+    $objList = Format-SqlObjectList -objList $objList.Split(',') -env $targetEnv
+    
+    Write-SqlObjListToLocalPath -objList $objList 
 
     Write-Verbose "TARGET: Adding, committing, publishing branch and pushing"
     git add .
@@ -94,10 +92,10 @@
 #2 already in prod-base. moving FROM here TO dev-base keeps diff fwd-only
     Enter-GitBranch -branchName $sourceBranch -Force
 
-#3 dev srvr to repo
-    Write-SqlObjListToLocalPath `
-        -objList    $objList ` #-env        $sourceEnv `
-        -Verbose
+#3 source srvr to repo
+    $objList = Format-SqlObjectList -objList $objList.Split(',') -env $sourceEnv
+    
+    Write-SqlObjListToLocalPath -objList $objList 
 
     Write-Verbose "SOURCE: Adding, committing, publishing branch and pushing"
     git add .
