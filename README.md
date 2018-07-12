@@ -7,7 +7,11 @@ The `SqlCodeReview` module provides a powershell one-liner for a developer to re
 ## Example
 
 ```powershell
-Request-DBCodeReview "AdventureWorks.Person.Person,WorldWideImporters.InMemory.Insert50ThousandVehicleLocations"
+$objectsToReview = @(
+    "AdventureWorks.Person.Person",
+    "WorldWideImporters.InMemory.Insert50ThousandVehicleLocations"
+)
+Request-DBCodeReview $objectsToReview
 ```
 
 The above script will launch a chrome session to your repo where you can submit a pull request comparing the differences between the two named objects in you _prod_ and _qa_ environments. 
