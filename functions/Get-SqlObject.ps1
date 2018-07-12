@@ -32,7 +32,7 @@ function Get-SqlObject {
     $sql_GetObject = @"
 select 
      [definition] = object_definition($objectId)
-    ,base_type    = convert(nchar(2),objectpropertyex($objectId,'BaseType'))
+    ,base_type    = rtrim(convert(nchar(2),objectpropertyex($objectId,'BaseType')))
     ,is_table     = convert(bit,iif(convert(nchar(2),objectpropertyex($objectId,'BaseType'))=N'U',1,0))
     ,[server]     = @@servername
     ,[database]   = db_name()

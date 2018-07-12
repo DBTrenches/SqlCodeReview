@@ -1,1 +1,3 @@
-/config/default.config.*
+/config/default.config.json
+/config/default.config.csv
+/config/object-type-map.csv
