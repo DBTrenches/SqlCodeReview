@@ -29,23 +29,15 @@
         ,[Parameter(
             ValueFromPipeline=$true,
             ValueFromPipelineByPropertyName=$true)]
-            [Alias('ObjectType','ObjectTypeName')]
+            [Alias('ObjectType','ObjectTypeName','base_type')]
             [string]$type
     )
     Begin {
         $formatStyle = $sqlCodeReview_DefaultModuleConfig.CodeReviewRepo.$project.DirectoryFormat.StyleName
         $nestUnder   = $sqlCodeReview_DefaultModuleConfig.CodeReviewRepo.$project.DirectoryFormat.NestFilesUnder
         $isPrefixDB  = $sqlCodeReview_DefaultModuleConfig.CodeReviewRepo.$project.DirectoryFormat.IsDatabasePrefixed
+        $typeMap     = $sqlCodeReview_DefaultModuleConfig.CodeReviewRepo.$project.DirectoryFormat.ObjectTypeMap.SubFolders
         $repoRoot    = $sqlCodeReview_DefaultModuleConfig.CodeReviewRepo.$project.LocalPath
-
-        $typeMap = $sqlCodeReview_DefaultModuleConfig.CodeReviewRepo.Default.DirectoryFormat.ObjectTypeMap.SubFolders
-        $typeDir = ($typeMap | Where-Object {$_.type_char -eq $type}).friendly_dir_path
-
-        if([string]::IsNullOrWhiteSpace($typeDir)){
-            $typeDir = ($typeMap | Where-Object {$_.type_char -eq $type}).type_desc
-        }
-
-        if([string]::IsNullOrWhiteSpace($typeDir)){$typeDir = $type}
 
         if(-not ([string]::IsNullOrWhiteSpace($nestUnder))){
             $repoRoot += "/$nestUnder"
@@ -56,17 +48,23 @@
         $DBPrefix = ""
         if($isPrefixDB){$DBPrefix = "/$Database"}
 
+        $typeDir = ($typeMap | Where-Object {$_.type_char -eq $type}).friendly_dir_path
+        if([string]::IsNullOrWhiteSpace($typeDir)){
+            $typeDir = ($typeMap | Where-Object {$_.type_char -eq $type}).type_desc
+        }
+        if([string]::IsNullOrWhiteSpace($typeDir)){$typeDir = $type}
+
         Switch($formatStyle)
         {
-            "fmt_SchemaType" { 
+            "fmt_SchemaType" {
                 $file   = "$name.sql"
                 $folder = "$repoRoot$DBPrefix/$schema/$typeDir/"
             }
-            "fmt_Default"    { 
+            "fmt_Default"    {
                 $file   = "$schema.$name.sql"
                 $folder = "$repoRoot$DBPrefix/$typeDir/"
             }
-            "fmt_TypeSchema" { 
+            "fmt_TypeSchema" {
                 $file   = "$name.sql"
                 $folder = "$repoRoot$DBPrefix/$typeDir/$schema/"
             }
