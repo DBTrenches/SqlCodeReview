@@ -7,7 +7,9 @@
 				"StyleName":"fmt_Default",
 				"NestFilesUnder":"DefaultProject",
 				"IsDatabasePrefixed":true,
-				"ObjectTypeMapFile":"~/git/db-code-Default/config/object-type-map.csv"
+				"ObjectTypeMap":{
+					"FilePath":"~/git/db-code-Default/config/object-type-map.csv"
+				}
 			},
 			"FileStyle":{},
 			"DefaultBaseBranch":"develop",
