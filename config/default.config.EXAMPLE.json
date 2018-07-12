@@ -5,8 +5,9 @@
 			"OriginCachedUrl":"https://www.github.com/petervandivier/db-code",
 			"DirectoryFormat":{
 				"StyleName":"fmt_Default",
-				"NestFilesUnder":"DefaultProject/",
-				"IsDatabasePrefixed":true
+				"NestFilesUnder":"DefaultProject",
+				"IsDatabasePrefixed":true,
+				"ObjectTypeMapFile":"~/git/db-code-Default/config/object-type-map.csv"
 			},
 			"FileStyle":{},
 			"DefaultBaseBranch":"develop",
@@ -18,8 +19,9 @@
 			"OriginCachedUrl":"https://www.github.com/petervandivier/db-code",
 			"DirectoryFormat":{
 				"StyleName":"fmt_Default",
-				"NestFilesUnder":"OtherProject/",
-				"IsDatabasePrefixed":true
+				"NestFilesUnder":"OtherProject",
+				"IsDatabasePrefixed":true,
+				"ObjectTypeMapFile":"c:/temp/git/db-code-Other/config/object-type-map.csv"
 			},
 			"FileStyle":{},
 			"DefaultBaseBranch":"master",
