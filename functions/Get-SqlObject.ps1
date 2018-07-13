@@ -30,7 +30,7 @@ function Get-SqlObject {
     $objectId = (Get-SqlObjectID @conn -schemaName $schema -objectName $object).id
 
     $sql_GetObject = @"
-select 
+select
      [definition] = object_definition($objectId)
     ,base_type    = rtrim(convert(nchar(2),objectpropertyex($objectId,'BaseType')))
     ,is_table     = convert(bit,iif(convert(nchar(2),objectpropertyex($objectId,'BaseType'))=N'U',1,0))
@@ -41,7 +41,8 @@ select
     ,id           = $objectId
 "@
 
-    $dbObject = (Invoke-SqlCmd @conn -query $sql_GetObject)
+    $2BB = [int64](([math]::Pow(2,31))-1)
+    $dbObject = (Invoke-SqlCmd @conn -query $sql_GetObject -MaxCharLength $2BB)
 
     if($dbObject.is_table){
         $dbObject.definition = (Get-SqlCreateTable @conn -tableId $objectId).createTableCommand
