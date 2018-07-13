@@ -41,12 +41,13 @@ select
     ,id           = $objectId
 "@
 
-    $2BB = [int64](([math]::Pow(2,31))-1)
-    $dbObject = (Invoke-SqlCmd @conn -query $sql_GetObject -MaxCharLength $2BB)
+    $dbObject = (Invoke-SqlCmd @conn -query $sql_GetObject -MaxCharLength (2gb-1))
 
     if($dbObject.is_table){
         $dbObject.definition = (Get-SqlCreateTable @conn -tableId $objectId).createTableCommand
     }
+
+    function isnull{Param($a,$b);if([string]::IsNullOrWhiteSpace($a)){$b}else{$a}}
 
     $dbObject | ForEach-Object {
         [PSCustomObject]@{
@@ -55,8 +56,8 @@ select
             is_table   = $PSItem.is_table
             server     = $PSItem.server
             database   = (Get-SqlQuoteNameSparse -text $PSItem.database).text
-            schema     = (Get-SqlQuoteNameSparse -text $PSItem.schema).text
-            name       = (Get-SqlQuoteNameSparse -text $PSItem.name).text
+            schema     = (Get-SqlQuoteNameSparse -text (isnull $PSItem.schema $schema)).text
+            name       = (Get-SqlQuoteNameSparse -text (isnull $PSItem.name $object)).text
             id         = $PSItem.id
             exists     = ($PSItem.id -ne 0)
         }
