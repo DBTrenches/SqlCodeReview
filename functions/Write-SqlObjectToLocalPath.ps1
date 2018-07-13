@@ -1,39 +1,44 @@
 ﻿Function Write-SqlObjectToLocalPath {
+<#
+    .TODO
+        Handle for object deletion/non-existant objects.
+        Return submitted object name rather than $null to verbose
+
+#>
     [cmdletbinding()]Param(
-        [parameter(Mandatory=$true)]
+        [parameter()]
             [Alias('InstanceName','SqlServer','ServerInstance')]
             [string]$Server
-        ,[parameter(Mandatory=$true)]
+        ,[parameter()]
             [Alias('DatabaseName','dbName')]
             [string]$Database
-        ,[parameter(Mandatory=$true)]
+        ,[parameter()]
             [Alias('SchemaName')]
             [string]$Schema
-        ,[parameter(Mandatory=$true)]
+        ,[parameter()]
             [Alias('ObjectName','Name')]
             [string]$Object
-        ,[parameter(Mandatory=$true)]
+        ,[parameter()]
             [Alias('ObjectType','TypeName')]
             [string]$Type
-        ,[parameter(Mandatory=$true)]
+        ,[parameter()]
             [Alias('ObjectDefinition')]
             [string]$Definition
         ,[parameter(Mandatory=$true)]
             [bool]$Exists
         ,[string]$project = "Default"
     )
-
-    $path = Get-SqlObjFilePath `
-        -project  $project `
-        -database $Database `
-        -schema   $Schema `
-        -object   $Object `
-        -type     $Type 
-
-    $fullPath   = $path.fullPath
-    $folderPath = $path.folder
-
     if($Exists){
+        $path = Get-SqlObjFilePath `
+            -project  $project `
+            -database $Database `
+            -schema   $Schema `
+            -object   $Object `
+            -type     $Type
+
+        $fullPath   = $path.fullPath
+        $folderPath = $path.folder
+
         if(-not (Test-Path $folderPath)){
             New-Item -Path $folderPath -ItemType Directory -Force | Out-Null
         }
@@ -41,10 +46,10 @@
         $Definition | New-Item -ItemType File -Path $fullPath -Force | Out-Null
     }else{
         Write-Verbose "Object '$Schema.$Object' not found at '$Server;$Database'."
-        if(Test-Path $fullPath){
+        <#if(Test-Path $fullPath){
             Write-Verbose "Attempting deletion of $fullPath."
             Remove-Item -Path $fullPath -Force
-        }
+        }#>
     }
 
     #[PSCustomObject]@{
