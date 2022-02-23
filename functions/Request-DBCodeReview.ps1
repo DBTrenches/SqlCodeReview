@@ -28,7 +28,7 @@
         Updating these config values will only take effect when you re-import the module.
 #>
     [cmdletbinding()]Param(
-         [parameter(mandatory=$true)]
+         [parameter(Mandatory)]
             [ValidateNotNullOrEmpty()]
             [string[]]$objList
         #,[string]$sourceBranch

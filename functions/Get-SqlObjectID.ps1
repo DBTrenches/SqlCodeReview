@@ -11,16 +11,16 @@ function Get-SqlObjectID {
     Get-SqlObjectID @wia
 #>
     [CmdletBinding()]Param(
-         [Parameter(Mandatory=$true)]
+         [Parameter(Mandatory)]
             [Alias('serverName','sqlServer','serverInstance')]
             [string]$server
-        ,[Parameter(Mandatory=$true)]
+        ,[Parameter(Mandatory)]
             [Alias('databaseName','dbName')]
             [string]$database
-        ,[Parameter(Mandatory=$true)]
+        ,[Parameter(Mandatory)]
 			[Alias('schemaName')]
             [string]$schema
-        ,[Parameter(Mandatory=$true)]
+        ,[Parameter(Mandatory)]
 			[Alias('objectName','name')]
             [string]$object
     )

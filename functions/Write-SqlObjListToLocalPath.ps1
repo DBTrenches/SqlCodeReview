@@ -6,7 +6,7 @@
 #>
     [cmdletbinding()]Param(
          $objList
-        ,[Parameter(Mandatory=$true)]
+        ,[Parameter(Mandatory)]
             [ValidateNotNullOrEmpty()]$project = "Default"
         ,[string]$envChoice
     )

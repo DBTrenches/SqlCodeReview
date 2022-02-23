@@ -16,7 +16,7 @@ function Format-SqlObjectList {
 #>
     [CmdletBinding()]Param(
          [string[]]$objList
-        ,[Parameter(Mandatory=$true)]
+        ,[Parameter(Mandatory)]
             [ValidateNotNullOrEmpty()]
             [string]$env
         ,$config = $sqlCodeReview_DefaultServerConfig

@@ -24,7 +24,7 @@
         ,[parameter()]
             [Alias('ObjectDefinition')]
             [string]$Definition
-        ,[parameter(Mandatory=$true)]
+        ,[parameter(Mandatory)]
             [bool]$Exists
         ,[string]$project = "Default"
     )
