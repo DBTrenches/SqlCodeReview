@@ -7,5 +7,5 @@ $conn = @{
 $mkTbl  = "$PSScriptRoot\..\sql\tbl_UnitTest.sql"
 $mkProc = "$PSScriptRoot\..\sql\sproc_UnitTest.sql"
 
-Invoke-SqlCmd @conn -InputFile $mkTbl
-Invoke-SqlCmd @conn -InputFile $mkProc
+Invoke-DbaQuery @conn -InputFile $mkTbl
+Invoke-DbaQuery @conn -InputFile $mkProc

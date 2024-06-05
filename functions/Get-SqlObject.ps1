@@ -9,7 +9,7 @@ function Get-SqlObject {
 #>
     [CmdletBinding()]Param(
          [Parameter(Mandatory=$true)]
-            [Alias('serverName','sqlServer','serverInstance')]
+            [Alias('serverName','sqlServer','serverInstance','sqlInstance')]
             [string]$server
         ,[Parameter(Mandatory=$true)]
             [Alias('databaseName','dbName')]
@@ -23,8 +23,8 @@ function Get-SqlObject {
     )
 
     $conn = @{
-        ServerInstance = $server
-        Database       = $database
+        SqlInstance = $server
+        Database    = $database
     }
 
     $objectId = (Get-SqlObjectID @conn -schemaName $schema -objectName $object).id
@@ -41,7 +41,7 @@ select
     ,id           = $objectId
 "@
 
-    $dbObject = (Invoke-SqlCmd @conn -query $sql_GetObject -MaxCharLength (2gb-1))
+    $dbObject = (Invoke-DbaQuery @conn -query $sql_GetObject -MaxCharLength (2gb-1))
 
     if($dbObject.is_table){
         $dbObject.definition = (Get-SqlCreateTable @conn -tableId $objectId).createTableCommand

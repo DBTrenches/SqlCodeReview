@@ -10,7 +10,7 @@ $connStr = @{
     Database       = "tempdb"
 }
 
-$baseline = Invoke-SqlCmd @connStr -Query $getBaseline
+$baseline = Invoke-DbaQuery @connStr -Query $getBaseline
 
 Describe "Get-SqlObjectID" {
     It "Stored Proc ID" {

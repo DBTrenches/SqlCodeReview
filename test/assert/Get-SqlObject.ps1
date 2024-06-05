@@ -18,7 +18,7 @@ $connStr = @{
     Database       = "tempdb"
 }
 
-$baseline = Invoke-SqlCmd @connStr -Query $getBaseline
+$baseline = Invoke-DbaQuery @connStr -Query $getBaseline
 $sproc_base = $baseline | Where-Object {$PSItem.Name -eq "sproc_UnitTest"}
 $tbl_base   = $baseline | Where-Object {$PSItem.Name -eq "tbl_UnitTest"}
 
