@@ -41,7 +41,7 @@ select
     ,id           = $objectId
 "@
 
-    $dbObject = (Invoke-DbaQuery @conn -query $sql_GetObject -MaxCharLength (2gb-1))
+    $dbObject = (Invoke-DbaQuery @conn -query $sql_GetObject)
 
     if($dbObject.is_table){
         $dbObject.definition = (Get-SqlCreateTable @conn -tableId $objectId).createTableCommand

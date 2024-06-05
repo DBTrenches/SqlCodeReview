@@ -12,7 +12,7 @@ function Get-SqlObjectID {
 #>
     [CmdletBinding()]Param(
          [Parameter(Mandatory=$true)]
-            [Alias('serverName','sqlServer','serverInstance')]
+            [Alias('serverName','sqlServer','serverInstance','sqlInstance')]
             [string]$server
         ,[Parameter(Mandatory=$true)]
             [Alias('databaseName','dbName')]
