@@ -1,5 +1,12 @@
-Get-ChildItem "$PSScriptRoot\functions\" | ForEach-Object {
+Push-Location $PsScriptroot
+
+. ./scripts/InitConfig.ps1
+
+Get-ChildItem functions | ForEach-Object {
     . $PSItem.FullName
+    Export-ModuleMember -Function $PSItem.BaseName
 }
 
-. $PSScriptRoot\SqlCodeReview.variables.ps1
+. /scripts/InitVariables.ps1
+
+Pop-Location
