@@ -7,6 +7,6 @@ Get-ChildItem functions | ForEach-Object {
     Export-ModuleMember -Function $PSItem.BaseName
 }
 
-. /scripts/InitVariables.ps1
+. ./scripts/InitVariables.ps1
 
 Pop-Location
