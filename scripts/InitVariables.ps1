@@ -1,5 +1,5 @@
 
-$script:sqlCodeReview_DefaultModuleConfig = Get-Content $PSScriptRoot\config\default.config.json | ConvertFrom-Json
+$script:sqlCodeReview_DefaultModuleConfig = Get-Content ~/.SqlCodeReview/default.config.json | ConvertFrom-Json
 
 $serverConfigPath = $sqlCodeReview_DefaultModuleConfig.EnvironmentConfigFile
 
